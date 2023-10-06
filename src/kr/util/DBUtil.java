@@ -1,6 +1,6 @@
 package kr.util;
 
-import java.sql.CallableStatement;
+import java.sql.CallableStatement; 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.DriverManager;
@@ -15,7 +15,7 @@ public class DBUtil {
 	private static final String DB_PASSWORD = "1234";
 	
 	//Connection 객체를 생성해서 반환
-	public static Connection getconnection() throws ClassNotFoundException, SQLException {
+	public static Connection getConnection() throws ClassNotFoundException, SQLException {
 		
 		//JDBC 수행 1단계 : 드라이버 로드
 		Class.forName(DB_DRIVER);
