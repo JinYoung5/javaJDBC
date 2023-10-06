@@ -21,7 +21,8 @@ public class InsertTestMain {
 			//JDBC 수행 3단계 : PreparedStatement 객체 생성
 			pstmt = conn.prepareStatement(sql); //명명규칙떄문에 prepared -> prepare로 바뀜(명사형)->(동사형)
 			//?에 데이터를 바인딩
-			pstmt.setString(1, "dragon"); //1번 ?에 데이터 전달
+			pstmt.setString(1, "h'ing"); //1번 ?에 데이터 전달 작은따옴표를 쓰려면 statement에서는 
+										//ex) 'h''ing'로 해야되는데 preparedstatement에서 하면 "h'ing"로 해서 더 편리함
 			pstmt.setInt(2, 90); //2번 ?에 데이터 전달
 			
 			//JDBC 수행 4단계 : SQL문을 실행해서 테이블에 행을 추가
