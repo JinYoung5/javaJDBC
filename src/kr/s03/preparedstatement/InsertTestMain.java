@@ -1,6 +1,6 @@
 package kr.s03.preparedstatement;
 
-import java.sql.Connection;
+import java.sql.Connection; 
 import java.sql.PreparedStatement;
 
 import kr.util.DBUtil;
