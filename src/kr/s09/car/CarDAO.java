@@ -1,4 +1,4 @@
-package kr.s08.memo;
+package kr.s09.car;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,39 +6,33 @@ import java.sql.ResultSet;
 
 import kr.util.DBUtil;
 
-/*
- *  DAO : Data Access Object
- *  	  데이터베이스의 데이터를 전문적으로 호출하고 제어하는 객체
- */
-
-public class MemoDAO {
-	//글쓰기
-	public void insertMemo(String name, String passwd, String subject, String content, String email) {
+public class CarDAO {
+	//자동차 정보 등록
+	public void insertCar(String name, String cnumber, String color, String maker, int price) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
-
+		
 		try {
 			//JDBC 수행 1,2단계
 			conn = DBUtil.getConnection();
-
 			//SQL문 작성
-			sql = "INSERT INTO memo (num, name, passwd, subject, content, email, reg_date)"
-					+ " VALUES (memo_seq.nextval,?,?,?,?,?,SYSDATE)";
-
-			//JDBC 수행 3단계
+			sql = "INSERT INTO car(num, name, cnumber, color, maker, price, reg_date)"
+					+ "VALUES(car_seq.nextval,?,?,?,?,?,SYSDATE)";
+			
+			//JDBC 수행 3단계		
 			pstmt = conn.prepareStatement(sql);
-			//?에 데이터바인딩
+			//?에 데이터 바인딩
 			pstmt.setString(1, name);
-			pstmt.setString(2, passwd);
-			pstmt.setString(3, subject);
-			pstmt.setString(4, content);
-			pstmt.setString(5, email);
-
+			pstmt.setString(2, cnumber);
+			pstmt.setString(3, color);
+			pstmt.setString(4, maker);
+			pstmt.setInt(5, price);
+			
 			//JDBC 수행 4단계
 			int count = pstmt.executeUpdate();
-			System.out.println(count + "개의 행을 삽입했습니다.");
-
+			System.out.println(count + "개의 행을 등록했습니다.");
+			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -47,39 +41,39 @@ public class MemoDAO {
 		}
 	}
 	//목록 보기
-	public void selectMemo() {
+	public void selectCar() { //번호,이름,제조사,등록일
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = null;
-
+		
 		try {
 			//JDBC 수행 1,2단계
 			conn = DBUtil.getConnection();
-
+			
 			//SQL문 작성
-			sql = "SELECT * FROM memo ORDER BY num DESC";
-
+			sql = "SELECT * FROM car ORDER BY num"; // num = primary key
+			
 			//JDBC 수행 3단계 : PreparedStatement 객체 생성
 			pstmt = conn.prepareStatement(sql);
-
-			System.out.println("----------------------------------------");
-
+			
+			System.out.println("---------------------------------");
+			
 			//JDBC 수행 4단계 : SQL문을 실행해서 결과행들을 ResultSet에 담음
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
-				System.out.println("글번호\t이름\t작성일\t\t제목");
-				do{
+				System.out.println("번호\t자동차 이름\t자동차 제조사\t자동차 등록일");
+				do {
+					//System.out.printf("%2d %s",rs.getInt("num"), "\t");
 					System.out.print(rs.getInt("num") + "\t");
-					System.out.print(rs.getString("name") + "\t");
-					System.out.print(rs.getDate("reg_date") + "\t");
-					System.out.println(rs.getString("subject") + "\t");
-				}while(rs.next());
+					System.out.print(rs.getString("name") + "\t\t");
+					System.out.print(rs.getString("maker") + "\t\t");
+					System.out.println(rs.getDate("reg_date"));
+				}while(rs.next());	
 			}else {
 				System.out.println("등록된 데이터가 없습니다.");
 			}
-			System.out.println("----------------------------------------");
-
+			System.out.println("---------------------------------");
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -87,39 +81,35 @@ public class MemoDAO {
 			DBUtil.executeClose(rs, pstmt, conn);
 		}
 	}
-	//상세글 보기
-	public void selectDetailMemo(int num) {
+	//자동차 상세 정보
+	public void selectDetailCar(int num) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = null;
-
+		
 		try {
 			//JDBC 수행 1,2단계
 			conn = DBUtil.getConnection();
-
+			
 			//SQL문 작성
-			sql = "SELECT * FROM memo WHERE num =?";
-
+			sql = "SELECT * FROM car WHERE num = ?";
+			
 			//JDBC 수행 3단계 : PreparedStatement 객체 생성
 			pstmt = conn.prepareStatement(sql);
 			//?에 데이터 바인딩
 			pstmt.setInt(1, num);
-
+			
 			//JDBC 수행 4단계 : SQL문을 실행해서 한 건의 레코드를 ResultSet에 담음
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
-				System.out.println("글 번호: " + rs.getInt("num")); //컬럼명을 넣기위함이라 자동완성으로된 num 을 쓰면 오류가 뜸 "num"으로 명시
-				System.out.println("이름 : " + rs.getString("name"));
-				System.out.println("비밀번호 : " + rs.getString("passwd"));
-				System.out.println("제목 : " + rs.getString("subject"));
-				System.out.println("내용 : " + rs.getString("content"));
-
-				String email = rs.getString("email");
-				if(email == null) email = "";
-
-				System.out.println("이메일 : " + email);
-				System.out.println("작성일 : " + rs.getDate("reg_date"));
+				System.out.println("번호: " + rs.getInt("num"));
+				System.out.println("자동차 이름: " + rs.getString("name"));
+				System.out.println("자동차 번호: " + rs.getString("cnumber"));
+				System.out.println("자동차 색상: " + rs.getString("color"));
+				System.out.println("자동차 제조사: " + rs.getString("maker"));
+				System.out.println("자동차 가격: " + rs.getInt("price"));
+				System.out.println("자동차 등록일: " + rs.getDate("reg_date"));
 			}else {
 				System.out.println("검색한 정보가 없습니다.");
 			}
@@ -127,36 +117,35 @@ public class MemoDAO {
 			e.printStackTrace();
 		}finally {
 			//자원 정리
-			DBUtil.executeClose(rs, pstmt, conn);		
+			DBUtil.executeClose(rs, pstmt, conn);
 		}
 	}
-	//글 수정
-	public void updateMemo(int num, String name, String passwd, String subject, String content, String email) {
+	//자동차 상세 정보 수정
+	public void updatecar(int num, String name, String cnumber, String color, String maker, int price) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
-
+		
 		try {
 			//JDBC 수행 1,2단계
 			conn = DBUtil.getConnection();
-
+			
 			//SQL문 작성
-			sql = "UPDATE memo SET name=?, passwd=?, subject=?, content=?, email=? WHERE num=?";
-
-			//JDBC 수행 3단계 : PrepareStatement 객체 생성
+			sql = "UPDATE car SET name=?, cnumber=?, color=?, maker=?, price=? WHERE num = ?";
+			
+			//JDBC 수행 3단계 : PreparedStatement 객체 생성
 			pstmt = conn.prepareStatement(sql);
 			//?에 데이터 바인딩
 			pstmt.setString(1, name);
-			pstmt.setString(2, passwd);
-			pstmt.setString(3, subject);
-			pstmt.setString(4, content);
-			pstmt.setString(5, email);
+			pstmt.setString(2, cnumber);
+			pstmt.setString(3, color);
+			pstmt.setString(4, maker);
+			pstmt.setInt(5, price);
 			pstmt.setInt(6, num);
-
+			
 			//JDBC 수행 4단계 : SQL문 실행
 			int count = pstmt.executeUpdate();
 			System.out.println(count + "개의 행을 수정했습니다.");
-
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -164,28 +153,28 @@ public class MemoDAO {
 			DBUtil.executeClose(null, pstmt, conn);
 		}
 	}
-	//글 삭제
-	public void deleteMemo(int num) {
+	//자동차 상세 정보 삭제
+	public void deleteCar(int num) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
-
+		
 		try {
-			//JBDC 수행 1,2단계
+			//JDBC 수행 1,2단계
 			conn = DBUtil.getConnection();
-
+			
 			//SQL문 작성
-			sql = "DELETE FROM memo WHERE num=?";
-
-			//JDBC수행 3단계 : PreparedStatement 객체 생성
+			sql = "DELETE FROM car WHERE num = ?";
+			
+			//JDBC 수행 3단계 : PreparedStatement 객체 생성
 			pstmt = conn.prepareStatement(sql);
 			//?에 데이터 바인딩
 			pstmt.setInt(1, num);
-
-			//JDBC 수행 4단계 : SQL문 실행
+			
+			//JDBD 수행 4단계 : SQL문 실행
 			int count = pstmt.executeUpdate();
 			System.out.println(count + "개 행을 삭제했습니다.");
-		}catch(Exception e){
+		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
 			//자원 정리
@@ -193,4 +182,3 @@ public class MemoDAO {
 		}
 	}
 }
-
