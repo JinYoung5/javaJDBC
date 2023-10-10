@@ -64,14 +64,19 @@ public class MemoDAO {
 			pstmt = conn.prepareStatement(sql);
 			
 			System.out.println("----------------------------------------");
-			System.out.println("글번호\t이름\t작성일\t\t제목");
+			
 			//JDBC 수행 4단계 : SQL문을 실행해서 결과행들을 ResultSet에 담음
 			rs = pstmt.executeQuery();
-			while(rs.next()) {
-				System.out.print(rs.getInt("num") + "\t");
-				System.out.print(rs.getString("name") + "\t");
-				System.out.print(rs.getDate("reg_date") + "\t");
-				System.out.println(rs.getString("subject") + "\t");
+			if(rs.next()) {
+				System.out.println("글번호\t이름\t작성일\t\t제목");
+				do{
+					System.out.print(rs.getInt("num") + "\t");
+					System.out.print(rs.getString("name") + "\t");
+					System.out.print(rs.getDate("reg_date") + "\t");
+					System.out.println(rs.getString("subject") + "\t");
+				}while(rs.next());
+			}else {
+				System.out.println("등록된 데이터가 없습니다.");
 			}
 			System.out.println("----------------------------------------");
 			
