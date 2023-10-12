@@ -43,11 +43,13 @@ public class BookUserMain {
 				}else if(no == 2) { //회원가입
 					System.out.print("아이디: ");
 					String me_id = br.readLine();
+					
 					//아이디 중복 체크
 					int check = dao.checkId(me_id);
 					if(check == 1){
 						System.out.println("아이디가 중복 되었습니다.");
 					}else {
+						
 						/*
 						 * 비밀번호 : 1234
 						 * 이름 :홍길동
@@ -55,6 +57,16 @@ public class BookUserMain {
 						 * 회원 가입이 완료되었습니다
 						 */
 					}
+					
+					System.out.print("비밀번호: ");
+					String me_passwd = br.readLine();
+					System.out.print("이름: ");
+					String me_name = br.readLine();
+					System.out.print("전화번호: ");
+					String me_phone = br.readLine();
+					
+					dao.insertMember(me_id, me_passwd, me_name, me_phone);
+
 				}else if(no == 3) { //종료
 					System.out.println("프로그램 종료");
 					break;
@@ -81,6 +93,12 @@ public class BookUserMain {
 					 * 도서 번호: 43
 					 * 도서 1건이 대출되었습니다. 
 					 */
+					dao.selectBook();
+					System.out.println("[도서 대출하기]");
+					System.out.print("도서 번호: ");
+					int bk_num = Integer.parseInt(br. readLine());
+			
+
 				}else if(no == 2) { //MY대출목록
 					/* 
 					 * -----------------------------------------
