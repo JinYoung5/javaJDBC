@@ -97,8 +97,10 @@ public class BookUserMain {
 					System.out.println("[도서 대출하기]");
 					System.out.print("도서 번호: ");
 					int bk_num = Integer.parseInt(br. readLine());
+					//System.out.print("아이디: ");
+					//me_id = br.readLine();
 			
-
+					dao.insertBookReservation(bk_num, me_id);
 				}else if(no == 2) { //MY대출목록
 					/* 
 					 * -----------------------------------------
@@ -106,6 +108,10 @@ public class BookUserMain {
 					 * 41	자바		대출중	2023-10-10
 					 * -----------------------------------------
 					 */
+					System.out.print("아이디: ");
+					me_id = br.readLine();
+					
+					dao.selectmyReservation(me_id);
 				}else if(no == 3) { //대출도서 반납
 					/*
 					 * -----------------------------------------
@@ -117,7 +123,16 @@ public class BookUserMain {
 					 * 1건의 도서가 반납되었습니다.
 					 * 
 					 */
+					System.out.println("[도서 반납하기]");
+					System.out.print("아이디: ");
+					me_id = br.readLine();
 					
+					dao.selectmyReservation(me_id);
+					
+					System.out.print("대출번호: ");
+					int re_num = Integer.parseInt(br.readLine());
+					
+					dao.updateReservation(me_id, re_num);
 				}else if(no == 4) { //종료
 					System.out.println("프로그램 종료");
 					break;

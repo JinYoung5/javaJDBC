@@ -34,10 +34,10 @@ public class BookAdminMain {
 					 * 카테고리 : IT
 					 * 1건의 도서 정보를 등록했습니다.
 					 */
-					System.out.print("도서명: ");
-					String bk_name = br.readLine();
 					System.out.print("카테고리: ");
 					String bk_category = br.readLine();
+					System.out.print("도서명: ");
+					String bk_name = br.readLine();
 					
 					dao.insertBook(bk_category, bk_name);
 				}else if(no == 2) { //도서 목록
@@ -59,6 +59,7 @@ public class BookAdminMain {
 					 * 19	반납		sky		별이야기	2023-10-09	2023-10-10	 
 					 * ----------------------------------------------------
 					 */
+					dao.selectReservation();
 				}else if(no == 4) { //회원 목록
 					/*
 					 * ----------------------------------------------------
@@ -68,6 +69,7 @@ public class BookAdminMain {
 					 * blue		장영실	010-5678-1234	2023-09-08
 					 * ----------------------------------------------------
 					 */
+					dao.selectMember();
 				}else if(no == 5) { //종료
 					System.out.println("프로그램 종료");
 					break;
