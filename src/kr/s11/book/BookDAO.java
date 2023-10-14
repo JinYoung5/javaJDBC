@@ -67,13 +67,12 @@ public class BookDAO {
 					System.out.print(rs.getInt("bk_num") + "\t");
 					System.out.print(rs.getString("bk_category") + "\t");
 					System.out.print(rs.getString("bk_name") + "\t");
-					System.out.print(rs.getInt("re_status") + "\t");
 					if(rs.getInt("re_status")==0) {
 						System.out.print("대출가능" + "\t");
 					}else {
 						System.out.print("대출중" + "\t");
 					}
-					System.out.print(rs.getDate("bk_regdate"));
+					System.out.println(rs.getDate("bk_regdate"));
 
 				}while(rs.next());
 			}else {
@@ -98,14 +97,14 @@ public class BookDAO {
 			//JDBC 수행 1,2단계
 			conn = DBUtil.getConnection();
 			//SQL문 작성
-			sql = "SEELCT me_id, me_name, me_phone, me_regdate FROM member ORDER BY me_regdate DESC";
+			sql = "SELECT me_id, me_name, me_phone, me_regdate FROM member ORDER BY me_regdate DESC";
 			//JDBC 수행 3단계
 			pstmt = conn.prepareStatement(sql);
 			//JDBC 수행 4단계
 			rs = pstmt.executeQuery();
 			System.out.println("---------------------------------------");
 			if(rs.next()) {
-				System.out.println("아이디\t이름\t전화번호\t가입일");
+				System.out.println("아이디\t이름\t전화번호\t\t가입일");
 				do {
 					System.out.print(rs.getString("me_id") + "\t");
 					System.out.print(rs.getString("me_name") + "\t");
@@ -138,6 +137,7 @@ public class BookDAO {
 			//JDBC 수행 3단계
 			pstmt = conn.prepareStatement(sql);
 			//JDBC 수행 4단계
+			rs = pstmt.executeQuery();
 			System.out.println("------------------------------------------------");
 			if(rs.next()) {
 				System.out.println("번호\t대출여부\t아이디\t대출도서명\t대출일\t반납일");
@@ -149,9 +149,8 @@ public class BookDAO {
 					}else {
 						System.out.print("대출" + "\t");
 					}
-					System.out.print(rs.getInt("re_status") + "\t");
 					System.out.print(rs.getString("me_id") + "\t");
-					System.out.print(rs.getString("bk_book") + "\t");
+					System.out.print(rs.getString("bk_name") + "\t");
 					System.out.print(rs.getDate("re_regdate") + "\t");
 					if(rs.getDate("re_modifydate") == null) {
 						System.out.println("");
@@ -166,7 +165,7 @@ public class BookDAO {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
-			DBUtil.executeClose(rs, pstmt, conn);
+			DBUtil.executeClose(null, pstmt, conn);
 		}
 
 	}
@@ -331,6 +330,8 @@ public class BookDAO {
 			//?에 데이터 바인딩
 			pstmt.setString(1, me_id);
 			//JDBC 수행 4단계
+			rs = pstmt.executeQuery();
+			
 			System.out.println("-----------------------------------------");
 			if(rs.next()) {
 				System.out.println("번호\t대출도서명\t대출여부\t등록일");
@@ -339,9 +340,8 @@ public class BookDAO {
 					System.out.print(rs.getInt("re_num") + "\t");
 					System.out.print(rs.getString("bk_name") + "\t");
 					if(rs.getInt("re_status") == 1) {
-						System.out.println("대출중" + "\t");
+						System.out.print("대출중" + "\t");
 					}
-					System.out.print(rs.getInt("re_status") + "\t");
 					System.out.println(rs.getDate("re_regdate"));
 				}while(rs.next());
 			}else {
@@ -387,7 +387,6 @@ public class BookDAO {
 	public void updateReservation(String me_id, int re_num) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 		String sql = null;
 		
 		try {
@@ -406,7 +405,7 @@ public class BookDAO {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
-			DBUtil.executeClose(rs, pstmt, conn);
+			DBUtil.executeClose(null, pstmt, conn);
 		}
 	}
 }
